@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-# 1️⃣ Configuración de página
+# 1️⃣ CONFIGURACIÓN DE PÁGINA
 st.set_page_config(
     page_title="Tracking Qx Medic",
     page_icon="📦",
@@ -9,22 +9,24 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# 2️⃣ CSS COMPLETO (Oculta logo Streamlit correctamente)
+# 2️⃣ CSS DEFINITIVO (ELIMINA LOGO STREAMLIT 2026)
 st.markdown("""
 <style>
 
-/* 🔥 OCULTAR TODO STREAMLIT HEADER */
-header[data-testid="stHeader"] {display: none;}
-div[data-testid="stToolbar"] {display: none;}
-div[data-testid="stDecoration"] {display: none;}
-div[data-testid="stStatusWidget"] {display: none;}
-div[data-testid="collapsedControl"] {display: none;}
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-.stAppDeployButton {display:none;}
+/* ===== ELIMINAR HEADER COMPLETO STREAMLIT ===== */
+header {visibility: hidden !important;}
+[data-testid="stHeader"] {display: none !important;}
+[data-testid="stToolbar"] {display: none !important;}
+[data-testid="stDecoration"] {display: none !important;}
+[data-testid="stStatusWidget"] {display: none !important;}
+[data-testid="collapsedControl"] {display: none !important;}
+[data-testid="stAppViewContainer"] > div:first-child {display: none !important;}
 
-/* VARIABLES */
+#MainMenu {visibility: hidden !important;}
+footer {visibility: hidden !important;}
+.stAppDeployButton {display: none !important;}
+
+/* ===== VARIABLES ===== */
 :root {
     --bg-card: white;
     --text-main: #1E293B;
@@ -38,7 +40,7 @@ header {visibility: hidden;}
     }
 }
 
-/* BANNER */
+/* ===== BANNER ===== */
 .header-banner {
     background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
     padding: 35px 20px;
@@ -54,7 +56,7 @@ header {visibility: hidden;}
     filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
 }
 
-/* CARD */
+/* ===== CARD ===== */
 .main-card {
     background-color: var(--bg-card);
     padding: 30px;
@@ -101,8 +103,7 @@ header {visibility: hidden;}
 </style>
 """, unsafe_allow_html=True)
 
-
-# 3️⃣ Carga de datos
+# 3️⃣ CARGA DE DATOS
 @st.cache_data(ttl=300)
 def load_data():
     try:
@@ -117,13 +118,13 @@ def load_data():
         return None
 
 
-# --- UI ---
+# 4️⃣ UI
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
 st.markdown(f"""
 <div class="header-banner">
     <img src="{logo_url}" class="logo-img">
-    <p style="margin:0; opacity: 0.9; font-size: 1.1rem; font-weight: 300; letter-spacing: 1px;">
+    <p style="margin:0; opacity:0.9; font-size:1.1rem; font-weight:300; letter-spacing:1px;">
         SISTEMA DE SEGUIMIENTO 2026
     </p>
 </div>
