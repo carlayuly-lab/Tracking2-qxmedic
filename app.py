@@ -59,7 +59,7 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # 3. Datos y Logo
-logo_url = "https://www.dropbox.com/scl/fi/g0iskt0kxm21h1197gyti/logo-qx3.png?rlkey=ftkvqak7e9s73o62umfn62276&dl=1" 
+logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&dl=1" 
 
 st.markdown(f'''
     <div class="header-banner">
