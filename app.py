@@ -7,42 +7,41 @@ st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="cen
 # 2. CSS DE LIMPIEZA TOTAL (Superior e Inferior)
 st.markdown("""
     <style>
-    /* --- OCULTAR BARRA SUPERIOR (Perfil y Deploy) --- */
+    /* 1. OCULTAR BARRA SUPERIOR Y MENÚ DE PERFIL */
     header[data-testid="stHeader"] {
         display: none !important;
         visibility: hidden !important;
     }
+    
+    /* 2. OCULTAR EL TOOLBAR DE STREAMLIT (Deploy, Config, etc.) */
     [data-testid="stToolbar"] {
         display: none !important;
         visibility: hidden !important;
     }
 
-    /* --- OCULTAR BARRA INFERIOR (Hosted with Streamlit / Created by) --- */
-    /* Este selector apunta a la barra flotante inferior de Streamlit Cloud */
-    div[data-testid="stStatusWidget"] {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    
+    /* 3. OCULTAR LA BARRA INFERIOR (Hosted with Streamlit) */
+    /* Este selector apunta al widget de estado y al footer estándar */
     footer {
         display: none !important;
         visibility: hidden !important;
     }
+    
+    #MainMenu {
+        visibility: hidden !important;
+    }
 
-    /* Ocultar el botón de la comunidad en la esquina inferior derecha */
-    .stApp > div:last-child {
+    /* Ocultar el botón flotante de la comunidad en la esquina inferior */
+    div[data-testid="stStatusWidget"], .stDeployButton {
+        display: none !important;
+        visibility: hidden !important;
+    }
+    
+    /* Regla agresiva para el botón rojo de "Hosted with Streamlit" */
+    div[class^="st-emotion-cache-"] > div[data-testid="stToolbar"] {
         display: none !important;
     }
 
-    /* --- AJUSTES DE ESPACIADO --- */
-    .stApp {
-        margin-top: -60px;
-    }
-    .block-container {
-        padding-top: 2rem !important;
-    }
-
-    /* --- ESTILOS DE TU INTERFAZ --- */
+    /* 4. AJUSTE DE DISEÑO */
     :root {
         --bg-card: white;
         --text-main: #1E293B;
@@ -60,11 +59,13 @@ st.markdown("""
         padding: 35px 20px; border-radius: 20px; color: white; text-align: center;
         margin-bottom: 30px;
     }
+    
     .logo-img {
         max-width: 180px;
         margin-bottom: 10px;
         filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
     }
+
     .main-card {
         background-color: var(--bg-card); 
         padding: 30px; border-radius: 25px;
@@ -123,10 +124,11 @@ if data is not None:
 
     if dni_input:
         resultado = data[data['DNI'].astype(str) == str(dni_input)]
+
         if not resultado.empty:
             res = resultado.iloc[0]
             st.balloons()
-            
+
             nombre = res.get('NOMBRES', '-')
             tracking = res.get('TRACKING', 'PENDIENTE')
             estado = str(res.get('ESTADO', 'PROCESANDO')).upper()
