@@ -78,7 +78,7 @@ def load_data():
         return None
 
 # --- UI ---
-logo_url = "https://www.dropbox.com/scl/fi/1tbfn3ge2b33nqnjgagft/LOGO-QX-MEDIC-600x315.png?rlkey=4qwxkmhs736fovnz2l3oxzier&raw=1" 
+logo_url = "https://www.dropbox.com/scl/fi/706xnjtj2ia8esxslmvpi/logo-qx2.png?rlkey=5q3aq2bfbnwdu235m27uawyzj&dl=0" 
 
 st.markdown(f'''
     <div class="header-banner">
