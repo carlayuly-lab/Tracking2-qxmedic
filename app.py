@@ -27,14 +27,13 @@ st.markdown("""
     }
     .header-banner {
         background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
-        padding: 25px; border-radius: 20px; color: white; text-align: center;
+        padding: 35px 20px; border-radius: 20px; color: white; text-align: center;
         margin-bottom: 30px;
     }
     
-    /* --- ESTILO PARA EL LOGO --- */
     .logo-img {
-        max-width: 150px; /* Puedes ajustar este valor para cambiar el tamaño */
-        margin-bottom: 15px;
+        max-width: 180px; /* Tamaño ajustado al no haber texto principal */
+        margin-bottom: 10px;
         filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
     }
 
@@ -78,14 +77,16 @@ def load_data():
         return None
 
 # --- UI ---
-# URL de Dropbox corregida para visualización directa
+# URL de tu logo (qx4)
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
+# Banner actualizado: Se eliminó el <h1> con el texto QX MEDIC
 st.markdown(f'''
     <div class="header-banner">
         <img src="{logo_url}" class="logo-img">
-        <h1 style="margin:0; font-size: 1.8rem;">QX MEDIC</h1>
-        <p style="margin:0; opacity: 0.9;">Sistema de Seguimiento 2026</p>
+        <p style="margin:0; opacity: 0.9; font-size: 1.1rem; font-weight: 300; letter-spacing: 1px;">
+            SISTEMA DE SEGUIMIENTO 2026
+        </p>
     </div>
 ''', unsafe_allow_html=True)
 
