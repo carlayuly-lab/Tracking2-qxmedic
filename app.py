@@ -33,7 +33,7 @@ st.markdown("""
     
     /* --- LOGO MINIATURA --- */
     .logo-img {
-        max-width: 15px; 
+        max-width: 10px; 
         margin-bottom: 2px;
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
     }
@@ -84,7 +84,7 @@ logo_url = "https://www.dropbox.com/scl/fi/1tbfn3ge2b33nqnjgagft/LOGO-QX-MEDIC-6
 st.markdown(f'''
     <div class="header-banner">
         <img src="{logo_url}" class="logo-img">
-        <h1 style="font-size: 1.4rem; margin: 0;">SISTEMA DE TRACKING</h1>
+        <h1 style="font-size: 1.0rem; margin: 0;">SISTEMA DE TRACKING</h1>
         <p style="margin: 0; opacity: 0.8; font-size: 0.85rem;">Logística y Envíos 2026</p>
     </div>
 ''', unsafe_allow_html=True)
