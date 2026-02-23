@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuración de página - LAYOUT WIDE para ocupar todo el ancho
+# 1. Configuración de página - Modo ancho para ocupar todo el celular
 st.set_page_config(
     page_title="Tracking Qx Medic", 
     page_icon="📦", 
@@ -17,12 +17,12 @@ st.markdown("""
         visibility: hidden !important;
     }
     
-    /* ELIMINAR BOTÓN DE FULLSCREEN EN COMPONENTES */
+    /* ELIMINAR BOTÓN DE FULLSCREEN (Pantalla completa en imágenes/tarjetas) */
     button[title="View fullscreen"] {
         display: none !important;
     }
 
-    /* FORZAR ANCHO TOTAL EN MÓVILES */
+    /* FORZAR ANCHO TOTAL Y ELIMINAR MÁRGENES LATERALES EN MÓVILES */
     .block-container {
         max-width: 100% !important;
         padding-top: 1rem !important;
@@ -81,7 +81,7 @@ def load_data():
     except Exception as e:
         return None
 
-# UI
+# --- UI ---
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
 st.markdown(f'''
