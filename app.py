@@ -31,7 +31,7 @@ st.markdown("""
         margin-bottom: 30px;
     }
     .logo-img {
-        max-width: 150px;
+        max-width: 250px; /* Aumentado un poco para que se vea mejor el logo horizontal */
         margin-bottom: 15px;
         filter: drop-shadow(0px 4px 8px rgba(0,0,0,0.2));
     }
@@ -75,8 +75,8 @@ def load_data():
         return None
 
 # --- UI ---
-# NOTA: Cambia la URL por el link directo de tu logo (PNG preferiblemente)
-logo_url = "https://www.qxmedic.com/wp-content/uploads/2021/07/logo-qxmedic-white.png" 
+# URL de Dropbox con el parámetro raw=1 para que funcione como enlace directo de imagen
+logo_url = "https://www.dropbox.com/scl/fi/1tbfn3ge2b33nqnjgagft/LOGO-QX-MEDIC-600x315.png?rlkey=4qwxkmhs736fovnz2l3oxzier&raw=1" 
 
 st.markdown(f'''
     <div class="header-banner">
