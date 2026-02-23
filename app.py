@@ -34,7 +34,7 @@ st.markdown("""
     /* --- LOGO MINIATURA --- */
     .logo-img {
         max-width: 15px; 
-        margin-bottom: 5px;
+        margin-bottom: 2px;
         filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
     }
     
