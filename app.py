@@ -2,52 +2,46 @@ import streamlit as st
 import pandas as pd
 
 # 1. Configuración de página
-st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="centered")
+st.set_page_config(page_title="Tracking", page_icon="📦", layout="centered")
 
-# 2. CSS Simplificado (Sin Logo, mayor compatibilidad)
+# 2. CSS Ultra-Simplificado (Solo lo esencial para que no falle)
 st.markdown("""
     <style>
-    /* Ocultar elementos de Streamlit */
-    header[data-testid="stHeader"], [data-testid="stToolbar"], footer {
-        display: none !important;
-        visibility: hidden !important;
-    }
+    /* Ocultar elementos básicos de la interfaz de Streamlit */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
     
-    #MainMenu { visibility: hidden !important; }
-
-    /* Ajuste de contenedor para Jotform */
+    /* Eliminar espacios blancos superiores */
     .block-container {
         padding-top: 1rem !important;
-        padding-bottom: 1rem !important;
     }
 
-    :root {
-        --bg-card: white;
-        --text-main: #1E293B;
-        --border-color: #EEE;
-    }
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg-card: #1E293B;
-            --text-main: #F8FAFC;
-            --border-color: #334155;
-        }
-    }
+    /* Estilos de la tarjeta y banner */
     .header-banner {
         background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
-        padding: 40px 20px; border-radius: 20px; color: white; text-align: center;
+        padding: 30px; 
+        border-radius: 20px; 
         margin-bottom: 30px;
+        min-height: 100px; /* Banner azul vacío pero presente */
     }
+    
     .main-card {
-        background-color: var(--bg-card); 
-        padding: 30px; border-radius: 25px;
+        background-color: white; 
+        padding: 30px; 
+        border-radius: 25px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
         border-top: 8px solid #1E40AF;
-        color: var(--text-main);
+        color: #1E293B;
     }
+
+    .info-label { color: #64748B; font-size: 0.75rem; margin:0; font-weight:bold; text-transform: uppercase; }
+    .info-value { margin:0; font-size: 0.95rem; margin-bottom: 10px; color: #1E293B; font-weight: 500; }
+    
     .pill {
         padding: 6px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8rem;
     }
+    
     .olva-btn {
         display: inline-block;
         margin-top: 20px;
@@ -58,8 +52,6 @@ st.markdown("""
         border-radius: 12px;
         font-weight: bold;
     }
-    .info-label { color: #64748B; font-size: 0.75rem; margin:0; font-weight:bold; text-transform: uppercase; }
-    .info-value { margin:0; font-size: 0.95rem; margin-bottom: 10px; color: var(--text-main); font-weight: 500; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -67,6 +59,7 @@ st.markdown("""
 @st.cache_data(ttl=300)
 def load_data():
     try:
+        # Usando los datos de tu Google Sheet
         sheet_id = "1tkKTopAlCGS_Ba7DaCkWFOHiwr_1uiU_Bima_cM5qcY"
         gid = "1777353802"
         url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
@@ -74,19 +67,11 @@ def load_data():
         df.columns = [str(c).strip().upper() for c in df.columns]
         return df
     except Exception as e:
-        st.error(f"Error al cargar datos: {e}")
         return None
 
 # --- UI ---
-# Banner solo con texto para asegurar la carga rápida
-st.markdown(f'''
-    <div class="header-banner">
-        <h1 style="margin:0; font-size: 2rem; letter-spacing: 2px;">QX MEDIC</h1>
-        <p style="margin:0; opacity: 0.9; font-size: 1rem; font-weight: 300;">
-            SISTEMA DE SEGUIMIENTO 2026
-        </p>
-    </div>
-''', unsafe_allow_html=True)
+# Banner azul vacío (sin texto ni logos)
+st.markdown('<div class="header-banner"></div>', unsafe_allow_html=True)
 
 data = load_data()
 
@@ -139,5 +124,5 @@ if data is not None:
             st.markdown(html_card, unsafe_allow_html=True)
         else:
             st.error("❌ No se encontró el DNI.")
-
-st.markdown("<br><p style='text-align: center; color: #94A3B8; font-size: 0.75rem;'>© 2026 Qx Medic | Logística</p>", unsafe_allow_html=True)
+else:
+    st.error("Error al conectar con la base de datos.")
