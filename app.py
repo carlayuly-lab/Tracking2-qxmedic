@@ -4,16 +4,29 @@ import pandas as pd
 # 1. Configuración de página
 st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="centered")
 
-# 2. CSS Mejorado y Limpieza Total de Interfaz
+# 2. CSS Reforzado para ocultar TODO el menú superior y perfil
 st.markdown("""
     <style>
-    /* OCULTAR ELEMENTOS DE STREAMLIT (Toolbar, Menú, Perfil, etc) */
-    [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
+    /* OCULTAR BARRA SUPERIOR, PERFIL Y MENÚ DE CONFIGURACIÓN */
+    header[data-testid="stHeader"] {
+        visibility: hidden;
+        height: 0%;
+        display: none !important;
+    }
+    [data-testid="stToolbar"] {
+        visibility: hidden;
+        display: none !important;
+    }
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
     .stAppDeployButton {display:none;}
     
+    /* Eliminar el espacio en blanco que queda arriba */
+    .block-container {
+        padding-top: 1rem;
+        padding-bottom: 0rem;
+    }
+
     :root {
         --bg-card: white;
         --text-main: #1E293B;
@@ -31,13 +44,11 @@ st.markdown("""
         padding: 35px 20px; border-radius: 20px; color: white; text-align: center;
         margin-bottom: 30px;
     }
-    
     .logo-img {
         max-width: 180px;
         margin-bottom: 10px;
         filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
     }
-
     .main-card {
         background-color: var(--bg-card); 
         padding: 30px; border-radius: 25px;
