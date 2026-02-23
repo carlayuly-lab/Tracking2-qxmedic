@@ -1,17 +1,39 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuración de página - CAMBIADO A WIDE PARA MÁXIMO ANCHO
-st.set_page_config(
-    page_title="Tracking Qx Medic", 
-    page_icon="📦", 
-    layout="wide" 
-)
+# 1. Configuración de página - Modo ancho para evitar recortes laterales
+st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="wide")
 
-# 2. CSS Mejorado y Adaptado para Jotform
+# 2. CSS Maestro de Limpieza Extrema
 st.markdown("""
     <style>
-    /* ELIMINAR MÁRGENES LATERALES DE STREAMLIT */
+    /* ELIMINAR HEADER, PERFIL Y BOTÓN DE DEPLOY SUPERIOR */
+    header[data-testid="stHeader"], 
+    [data-testid="stToolbar"],
+    .stAppDeployButton {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* ELIMINAR FOOTER Y "BUILT WITH STREAMLIT" */
+    footer {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* ELIMINAR BOTÓN DE FULLSCREEN (Pantalla completa) */
+    button[title="View fullscreen"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* ELIMINAR WIDGETS DE ESTADO Y BARRA INFERIOR */
+    [data-testid="stStatusWidget"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* FORZAR ANCHO TOTAL DEL CONTENEDOR Y ELIMINAR ESPACIOS */
     .block-container {
         max-width: 100% !important;
         padding-top: 1rem !important;
@@ -20,27 +42,15 @@ st.markdown("""
         padding-bottom: 0rem !important;
     }
 
-    /* OCULTAR ELEMENTOS DE INTERFAZ */
-    header[data-testid="stHeader"], 
-    [data-testid="stToolbar"], 
-    footer {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    
-    .stAppDeployButton {display:none;}
-
+    /* ESTILOS DE LA INTERFAZ PERSONALIZADA */
     :root {
         --bg-card: white;
         --text-main: #1E293B;
-        --border-color: #EEE;
     }
-
     @media (prefers-color-scheme: dark) {
         :root {
             --bg-card: #1E293B;
             --text-main: #F8FAFC;
-            --border-color: #334155;
         }
     }
 
@@ -67,13 +77,15 @@ st.markdown("""
         box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
         border-top: 8px solid #1E40AF;
         color: var(--text-main);
-        width: 100%;
-        max-width: 800px; /* Centrado visual en pantallas grandes */
+        max-width: 850px; 
         margin: auto;
     }
 
     .pill {
-        padding: 6px 15px; border-radius: 50px; font-weight: bold; font-size: 0.8rem;
+        padding: 6px 15px; 
+        border-radius: 50px; 
+        font-weight: bold; 
+        font-size: 0.8rem;
     }
 
     .olva-btn {
@@ -90,15 +102,15 @@ st.markdown("""
     .info-label { color: #64748B; font-size: 0.75rem; margin:0; font-weight:bold; text-transform: uppercase; }
     .info-value { margin:0; font-size: 0.95rem; margin-bottom: 10px; color: var(--text-main); font-weight: 500; }
     
-    /* Ajuste para que el input de texto no sea demasiado ancho */
+    /* Centrar el buscador de DNI */
     .stTextInput {
-        max-width: 800px;
+        max-width: 850px;
         margin: auto;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Carga de datos
+# 3. Carga de datos desde Google Sheets
 @st.cache_data(ttl=300)
 def load_data():
     try:
@@ -109,10 +121,9 @@ def load_data():
         df.columns = [str(c).strip().upper() for c in df.columns]
         return df
     except Exception as e:
-        st.error(f"Error: {e}")
         return None
 
-# --- UI ---
+# --- UI (Interfaz de Usuario) ---
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
 st.markdown(f'''
@@ -127,7 +138,6 @@ st.markdown(f'''
 data = load_data()
 
 if data is not None:
-    # Contenedor para centrar el input igual que la tarjeta
     dni_input = st.text_input("🔍 Ingresa tu DNI:", placeholder="Ej. 70254718").strip()
 
     if dni_input:
@@ -137,6 +147,7 @@ if data is not None:
             res = resultado.iloc[0]
             st.balloons()
 
+            # Extraer campos de la fila
             nombre = res.get('NOMBRES', '-')
             tracking = res.get('TRACKING', 'PENDIENTE')
             estado = str(res.get('ESTADO', 'PROCESANDO')).upper()
@@ -149,6 +160,7 @@ if data is not None:
             bg_p = "#DCFCE7" if "ENTREGADO" in estado else "#FEF9C3"
             tx_p = "#16A34A" if "ENTREGADO" in estado else "#854D0E"
 
+            # Tarjeta de resultados en HTML
             html_card = f"""
             <div class="main-card">
                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
@@ -175,8 +187,6 @@ if data is not None:
             """
             st.markdown(html_card, unsafe_allow_html=True)
         else:
-            st.markdown("<div style='max-width:800px; margin:auto;'>", unsafe_allow_html=True)
             st.error("❌ No se encontró el DNI.")
-            st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<br><p style='text-align: center; color: #94A3B8; font-size: 0.75rem;'>© 2026 Qx Medic | Logística</p>", unsafe_allow_html=True)
