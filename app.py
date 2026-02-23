@@ -4,40 +4,45 @@ import pandas as pd
 # 1. Configuración de página
 st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="centered")
 
-# 2. CSS DE LIMPIEZA EXTREMA (Fuerza Bruta)
+# 2. CSS DE LIMPIEZA TOTAL (Superior e Inferior)
 st.markdown("""
     <style>
-    /* 1. Ocultar el Header completo (donde está el perfil y deploy) */
+    /* --- OCULTAR BARRA SUPERIOR (Perfil y Deploy) --- */
     header[data-testid="stHeader"] {
         display: none !important;
         visibility: hidden !important;
     }
-    
-    /* 2. Ocultar la barra de herramientas y el menú de 3 puntos */
-    [data-testid="stToolbar"], [data-testid="stStatusWidget"] {
+    [data-testid="stToolbar"] {
         display: none !important;
         visibility: hidden !important;
     }
 
-    /* 3. Ocultar el menú de hamburguesa y el footer */
-    #MainMenu {visibility: hidden !important;}
-    footer {visibility: hidden !important;}
+    /* --- OCULTAR BARRA INFERIOR (Hosted with Streamlit / Created by) --- */
+    /* Este selector apunta a la barra flotante inferior de Streamlit Cloud */
+    div[data-testid="stStatusWidget"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
     
-    /* 4. Quitar el botón de Deploy de raíz */
-    .stAppDeployButton {
+    footer {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* Ocultar el botón de la comunidad en la esquina inferior derecha */
+    .stApp > div:last-child {
         display: none !important;
     }
 
-    /* 5. Ajustar el espacio superior para que no quede un hueco vacío */
+    /* --- AJUSTES DE ESPACIADO --- */
     .stApp {
         margin-top: -60px;
     }
-    
-    /* 6. Ajustar padding del contenedor principal */
     .block-container {
         padding-top: 2rem !important;
     }
 
+    /* --- ESTILOS DE TU INTERFAZ --- */
     :root {
         --bg-card: white;
         --text-main: #1E293B;
@@ -118,11 +123,10 @@ if data is not None:
 
     if dni_input:
         resultado = data[data['DNI'].astype(str) == str(dni_input)]
-
         if not resultado.empty:
             res = resultado.iloc[0]
             st.balloons()
-
+            
             nombre = res.get('NOMBRES', '-')
             tracking = res.get('TRACKING', 'PENDIENTE')
             estado = str(res.get('ESTADO', 'PROCESANDO')).upper()
