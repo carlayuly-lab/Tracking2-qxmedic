@@ -4,15 +4,16 @@ import pandas as pd
 # 1. Configuración de página
 st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="centered")
 
-# 2. CSS Mejorado
+# 2. CSS Mejorado y Limpieza Total de Interfaz
 st.markdown("""
     <style>
-    /* OCULTAR ELEMENTOS DE STREAMLIT */
+    /* OCULTAR ELEMENTOS DE STREAMLIT (Toolbar, Menú, Perfil, etc) */
+    [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
     .stAppDeployButton {display:none;}
-
+    
     :root {
         --bg-card: white;
         --text-main: #1E293B;
@@ -32,7 +33,7 @@ st.markdown("""
     }
     
     .logo-img {
-        max-width: 180px; /* Tamaño ajustado al no haber texto principal */
+        max-width: 180px;
         margin-bottom: 10px;
         filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
     }
@@ -77,10 +78,8 @@ def load_data():
         return None
 
 # --- UI ---
-# URL de tu logo (qx4)
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
-# Banner actualizado: Se eliminó el <h1> con el texto QX MEDIC
 st.markdown(f'''
     <div class="header-banner">
         <img src="{logo_url}" class="logo-img">
