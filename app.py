@@ -30,7 +30,7 @@ st.markdown("""
         margin-bottom: 30px;
     }
     
-    /* --- AJUSTE DE TAMAÑO DEL LOGO --- */
+    /* --- AQUÍ SE AJUSTA EL TAMAÑO DEL LOGO --- */
     .logo-img {
         max-width: 120px; 
         margin-bottom: 10px;
@@ -58,8 +58,8 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Datos y Nuevo Logo (URL Actualizada)
-logo_url = "https://www.dropbox.com/scl/fi/706xnjtj2ia8esxslmvpi/logo-qx2.png?rlkey=5q3aq2bfbnwdu235m27uawyzj&raw=1" 
+# 3. Datos y Logo
+logo_url = "https://www.dropbox.com/scl/fi/706xnjtj2ia8esxslmvpi/logo-qx2.png?rlkey=5q3aq2bfbnwdu235m27uawyzj&dl=1" 
 
 st.markdown(f'''
     <div class="header-banner">
