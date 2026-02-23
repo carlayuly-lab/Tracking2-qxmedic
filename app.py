@@ -1,72 +1,70 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuración de página (Debe ser la primera línea)
-st.set_page_config(page_title="Consulta", layout="centered")
+# 1. Configuración de página (OBLIGATORIO ser la primera línea)
+st.set_page_config(page_title="Consulta Qx Medic", layout="centered")
 
-# 2. CSS de Limpieza Absoluta para evitar bloqueos visuales
+# 2. CSS de compatibilidad total para Jotform
 st.markdown("""
     <style>
-    /* Ocultar todo lo que no sea el contenido */
+    /* Ocultar elementos de la interfaz de Streamlit */
     header, footer, .stAppDeployButton, [data-testid="stToolbar"] {
         display: none !important;
+        visibility: hidden !important;
     }
+    /* Eliminar espacios en blanco superiores */
     .block-container {
-        padding-top: 10px !important;
+        padding-top: 0rem !important;
     }
-    /* Diseño de la tarjeta */
-    .resultado-card {
+    /* Estilo de la tarjeta de resultados */
+    .main-card {
         background-color: white; 
         padding: 20px; 
         border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
         border-top: 5px solid #1E40AF;
         color: #1E293B;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Carga de datos simplificada
+# 3. Función de carga de datos
 @st.cache_data(ttl=60)
-def get_data():
+def load_data():
     try:
-        # Tu Sheet ID y GID de siempre
         url = "https://docs.google.com/spreadsheets/d/1tkKTopAlCGS_Ba7DaCkWFOHiwr_1uiU_Bima_cM5qcY/export?format=csv&gid=1777353802"
-        return pd.read_csv(url, dtype=str)
-    except Exception as e:
-        st.error("Error técnico de conexión.")
+        df = pd.read_csv(url, dtype=str)
+        df.columns = [str(c).strip().upper() for c in df.columns]
+        return df
+    except:
         return None
 
-df = get_data()
+df = load_data()
 
 if df is not None:
-    # Normalizar columnas
-    df.columns = [str(c).strip().upper() for c in df.columns]
-    
-    # Buscador sencillo
-    dni = st.text_input("🔍 Ingresa DNI:").strip()
+    # Buscador
+    dni = st.text_input("🔍 Ingresa tu DNI:", placeholder="Ej: 72190439").strip()
 
     if dni:
-        res = df[df['DNI'].astype(str) == str(dni)]
-
-        if not res.empty:
-            fila = res.iloc[0]
+        res_df = df[df['DNI'].astype(str) == str(dni)]
+        if not res_df.empty:
+            res = res_df.iloc[0]
             st.balloons()
             
-            # Mostrar resultado en HTML limpio
+            # Mostrar tarjeta en HTML
             st.markdown(f"""
-            <div class="resultado-card">
-                <h3 style="margin:0;">{fila.get('NOMBRES', 'Usuario')}</h3>
+            <div class="main-card">
+                <h3 style="margin:0;">{res.get('NOMBRES', 'Estudiante')}</h3>
+                <p style="color: green; font-weight: bold;">ENTREGADO</p>
                 <hr>
-                <p><b>Estado:</b> {fila.get('ESTADO', '-')}</p>
-                <p><b>Tracking:</b> <span style="color:blue;">{fila.get('TRACKING', '-')}</span></p>
-                <p><b>Curso:</b> {fila.get('CURSO', '-')}</p>
+                <p><b>Tracking:</b> {res.get('TRACKING', '-')}</p>
+                <p><b>Curso:</b> {res.get('CURSO', '-')}</p>
+                <p><b>Ubicación:</b> {res.get('DISTRITO', '')}, {res.get('PROVINCIA', '')}</p>
                 <br>
                 <a href="https://tracking.olvaexpress.pe" target="_blank" 
-                   style="background:#2563EB; color:white; padding:10px; border-radius:5px; text-decoration:none;">
-                   🚚 Rastrear en Olva
-                </a>
+                   style="background:#2563EB; color:white; padding:10px; border-radius:8px; text-decoration:none;">
+                   🚚 Ver en Olva Courier</a>
             </div>
             """, unsafe_allow_html=True)
         else:
-            st.warning("DNI no registrado.")
+            st.error("DNI no encontrado.")
