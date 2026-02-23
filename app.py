@@ -4,48 +4,23 @@ import pandas as pd
 # 1. Configuración de página
 st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="centered")
 
-# 2. CSS Reforzado para Limpieza Total (Ideal para Jotform)
+# 2. CSS Simplificado (Sin Logo, mayor compatibilidad)
 st.markdown("""
     <style>
-    /* OCULTAR HEADER, PERFIL Y BOTÓN DE DEPLOY */
-    header[data-testid="stHeader"] {
+    /* Ocultar elementos de Streamlit */
+    header[data-testid="stHeader"], [data-testid="stToolbar"], footer {
         display: none !important;
         visibility: hidden !important;
     }
     
-    /* OCULTAR BARRA DE HERRAMIENTAS Y MENÚ DE CONFIGURACIÓN */
-    [data-testid="stToolbar"] {
-        display: none !important;
-        visibility: hidden !important;
-    }
+    #MainMenu { visibility: hidden !important; }
 
-    /* OCULTAR FOOTER Y MARCA DE AGUA (Hosted with Streamlit) */
-    footer {
-        display: none !important;
-        visibility: hidden !important;
-    }
-    
-    #MainMenu {
-        visibility: hidden !important;
-    }
-
-    /* OCULTAR BOTÓN DE COMUNIDAD Y WIDGETS DE ESTADO INFERIORES */
-    div[data-testid="stStatusWidget"], .stDeployButton {
-        display: none !important;
-        visibility: hidden !important;
-    }
-
-    /* OPTIMIZACIÓN DE ESPACIO PARA IFRAME */
+    /* Ajuste de contenedor para Jotform */
     .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-    }
-    
-    .stApp {
-        margin-top: -50px;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
     }
 
-    /* ESTILOS DE LA INTERFAZ */
     :root {
         --bg-card: white;
         --text-main: #1E293B;
@@ -60,16 +35,9 @@ st.markdown("""
     }
     .header-banner {
         background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
-        padding: 35px 20px; border-radius: 20px; color: white; text-align: center;
+        padding: 40px 20px; border-radius: 20px; color: white; text-align: center;
         margin-bottom: 30px;
     }
-    
-    .logo-img {
-        max-width: 180px;
-        margin-bottom: 10px;
-        filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
-    }
-
     .main-card {
         background-color: var(--bg-card); 
         padding: 30px; border-radius: 25px;
@@ -106,17 +74,15 @@ def load_data():
         df.columns = [str(c).strip().upper() for c in df.columns]
         return df
     except Exception as e:
-        st.error(f"Error: {e}")
+        st.error(f"Error al cargar datos: {e}")
         return None
 
 # --- UI ---
-# URL de tu logo actualizada
-logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
-
+# Banner solo con texto para asegurar la carga rápida
 st.markdown(f'''
     <div class="header-banner">
-        <img src="{logo_url}" class="logo-img">
-        <p style="margin:0; opacity: 0.9; font-size: 1.1rem; font-weight: 300; letter-spacing: 1px;">
+        <h1 style="margin:0; font-size: 2rem; letter-spacing: 2px;">QX MEDIC</h1>
+        <p style="margin:0; opacity: 0.9; font-size: 1rem; font-weight: 300;">
             SISTEMA DE SEGUIMIENTO 2026
         </p>
     </div>
