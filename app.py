@@ -1,30 +1,20 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuración de página
+# 1. Configuración de página - Debe ser la primera instrucción
 st.set_page_config(page_title="Tracking", page_icon="📦", layout="centered")
 
-# 2. CSS para eliminar la zona azul y limpiar la interfaz
+# 2. CSS Simplificado y Seguro
 st.markdown("""
     <style>
-    /* Ocultar elementos de Streamlit */
-    header[data-testid="stHeader"], [data-testid="stToolbar"], footer {
+    /* Ocultar elementos de la interfaz de Streamlit de forma segura */
+    header, footer, .stAppDeployButton {
         display: none !important;
-        visibility: hidden !important;
     }
     
-    #MainMenu { visibility: hidden !important; }
+    #MainMenu { visibility: hidden; }
 
-    /* REDUCIR ESPACIO SUPERIOR AL MÁXIMO */
-    .stApp {
-        margin-top: -80px;
-    }
-    .block-container {
-        padding-top: 0rem !important;
-        padding-bottom: 0rem !important;
-    }
-
-    /* Estilo de la tarjeta de resultados */
+    /* Contenedor de la tarjeta de resultados */
     .main-card {
         background-color: white; 
         padding: 25px; 
@@ -32,7 +22,7 @@ st.markdown("""
         box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
         border-top: 6px solid #1E40AF;
         color: #1E293B;
-        margin-top: 10px;
+        margin-top: 20px;
     }
 
     .info-label { color: #64748B; font-size: 0.75rem; margin:0; font-weight:bold; text-transform: uppercase; }
@@ -55,10 +45,11 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Carga de datos
+# 3. Carga de datos optimizada
 @st.cache_data(ttl=300)
 def load_data():
     try:
+        # URL de tu Google Sheet (asegúrate de que el CSV sea accesible)
         sheet_id = "1tkKTopAlCGS_Ba7DaCkWFOHiwr_1uiU_Bima_cM5qcY"
         gid = "1777353802"
         url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
@@ -68,22 +59,25 @@ def load_data():
     except Exception as e:
         return None
 
-# --- UI ---
-# Se eliminó por completo el div de "header-banner"
+# --- Interfaz de Usuario (UI) ---
 
 data = load_data()
 
 if data is not None:
-    # El buscador ahora será lo primero que aparezca
+    # Espacio opcional arriba si quieres que no pegue al borde superior de Jotform
+    st.write("") 
+    
     dni_input = st.text_input("🔍 Ingresa tu DNI:", placeholder="Ej. 70254718").strip()
 
     if dni_input:
+        # Filtrar por DNI
         resultado = data[data['DNI'].astype(str) == str(dni_input)]
 
         if not resultado.empty:
             res = resultado.iloc[0]
             st.balloons()
 
+            # Obtener datos de la fila
             nombre = res.get('NOMBRES', '-')
             tracking = res.get('TRACKING', 'PENDIENTE')
             estado = str(res.get('ESTADO', 'PROCESANDO')).upper()
@@ -96,6 +90,7 @@ if data is not None:
             bg_p = "#DCFCE7" if "ENTREGADO" in estado else "#FEF9C3"
             tx_p = "#16A34A" if "ENTREGADO" in estado else "#854D0E"
 
+            # Tarjeta de resultados en HTML
             html_card = f"""
             <div class="main-card">
                 <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
@@ -124,4 +119,7 @@ if data is not None:
         else:
             st.error("❌ No se encontró el DNI.")
 else:
-    st.error("Error al conectar con la base de datos.")
+    st.error("Error al conectar con la base de datos de Google Sheets.")
+
+# Pie de página opcional y discreto
+st.markdown("<br><p style='text-align: center; color: #94A3B8; font-size: 0.7rem;'>Sistema de Logística 2026</p>", unsafe_allow_html=True)
