@@ -8,21 +8,36 @@ st.set_page_config(
     layout="wide" 
 )
 
-# 2. CSS Maestro para eliminar bordes, marcas de agua y ajustar el ancho
+# 2. CSS Maestro para deshabilitar Fullscreen, Redirecciones y marca de agua
 st.markdown("""
     <style>
-    /* ELIMINAR ELEMENTOS DE STREAMLIT (Built with Streamlit, Fullscreen, etc) */
-    header, footer, .stAppDeployButton, [data-testid="stToolbar"] {
+    /* 1. DESHABILITAR BOTÓN DE FULLSCREEN (Pantalla completa) */
+    button[title="View fullscreen"], 
+    .element-container:has(button[title="View fullscreen"]) button {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
+    /* 2. ELIMINAR "BUILT WITH STREAMLIT" Y FOOTER */
+    footer {
         display: none !important;
         visibility: hidden !important;
     }
-    
-    /* ELIMINAR BOTÓN DE FULLSCREEN (Pantalla completa en imágenes/tarjetas) */
-    button[title="View fullscreen"] {
-        display: none !important;
+
+    /* 3. DESHABILITAR REDIRECCIONES / CLICS EN EL BANNER O IMÁGENES */
+    .header-banner, .logo-img {
+        pointer-events: none !important;
+        cursor: default !important;
     }
 
-    /* FORZAR ANCHO TOTAL Y ELIMINAR MÁRGENES LATERALES EN MÓVILES */
+    /* 4. OCULTAR HEADER Y BARRA DE HERRAMIENTAS */
+    header, [data-testid="stHeader"], [data-testid="stToolbar"], .stAppDeployButton {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* 5. AJUSTE DE ANCHO TOTAL PARA CELULARES */
     .block-container {
         max-width: 100% !important;
         padding-top: 1rem !important;
@@ -31,7 +46,7 @@ st.markdown("""
         padding-bottom: 0rem !important;
     }
 
-    /* AJUSTE DE LA TARJETA PARA CELULARES */
+    /* DISEÑO DE LA TARJETA ADAPTABLE */
     .main-card {
         background-color: white; 
         padding: 20px; 
@@ -40,22 +55,15 @@ st.markdown("""
         border-top: 8px solid #1E40AF;
         color: #1E293B;
         width: 100% !important;
-        margin: auto;
     }
 
-    /* Banner adaptable */
     .header-banner {
         background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
         padding: 25px 10px; border-radius: 15px; color: white; text-align: center;
         margin-bottom: 20px; width: 100%;
     }
     
-    .logo-img {
-        max-width: 150px;
-        filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
-    }
-
-    /* Estilos de texto y etiquetas */
+    .logo-img { max-width: 150px; }
     .info-label { color: #64748B; font-size: 0.7rem; font-weight:bold; text-transform: uppercase; }
     .info-value { font-size: 0.9rem; margin-bottom: 8px; color: #1E293B; font-weight: 500; }
     .pill { padding: 4px 10px; border-radius: 50px; font-weight: bold; font-size: 0.7rem; }
@@ -64,26 +72,28 @@ st.markdown("""
         display: inline-block; margin-top: 15px; padding: 10px 20px;
         background-color: #2563EB; color: white !important;
         text-decoration: none !important; border-radius: 10px; font-weight: bold;
+        pointer-events: auto !important; /* El botón de Olva sí debe funcionar */
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Carga de datos
+# 3. Carga de datos (Google Sheets)
 @st.cache_data(ttl=300)
 def load_data():
     try:
         sheet_id = "1tkKTopAlCGS_Ba7DaCkWFOHiwr_1uiU_Bima_cM5qcY"
         gid = "1777353802"
         url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv&gid={gid}"
-        df = pd.read_csv(url, dtype=str)
+        df = pd.read_csv(url)
         df.columns = [str(c).strip().upper() for c in df.columns]
         return df
-    except Exception as e:
+    except:
         return None
 
-# --- UI ---
+# --- INTERFAZ ---
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
+# Banner sin enlaces (pointer-events: none en CSS asegura que no redireccione)
 st.markdown(f'''
     <div class="header-banner">
         <img src="{logo_url}" class="logo-img">
