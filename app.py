@@ -4,27 +4,38 @@ import pandas as pd
 # 1. Configuración de página
 st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="centered")
 
-# 2. CSS Reforzado para ocultar TODO el menú superior y perfil
+# 2. CSS DE LIMPIEZA EXTREMA (Fuerza Bruta)
 st.markdown("""
     <style>
-    /* OCULTAR BARRA SUPERIOR, PERFIL Y MENÚ DE CONFIGURACIÓN */
+    /* 1. Ocultar el Header completo (donde está el perfil y deploy) */
     header[data-testid="stHeader"] {
-        visibility: hidden;
-        height: 0%;
         display: none !important;
+        visibility: hidden !important;
     }
-    [data-testid="stToolbar"] {
-        visibility: hidden;
-        display: none !important;
-    }
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    .stAppDeployButton {display:none;}
     
-    /* Eliminar el espacio en blanco que queda arriba */
+    /* 2. Ocultar la barra de herramientas y el menú de 3 puntos */
+    [data-testid="stToolbar"], [data-testid="stStatusWidget"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
+
+    /* 3. Ocultar el menú de hamburguesa y el footer */
+    #MainMenu {visibility: hidden !important;}
+    footer {visibility: hidden !important;}
+    
+    /* 4. Quitar el botón de Deploy de raíz */
+    .stAppDeployButton {
+        display: none !important;
+    }
+
+    /* 5. Ajustar el espacio superior para que no quede un hueco vacío */
+    .stApp {
+        margin-top: -60px;
+    }
+    
+    /* 6. Ajustar padding del contenedor principal */
     .block-container {
-        padding-top: 1rem;
-        padding-bottom: 0rem;
+        padding-top: 2rem !important;
     }
 
     :root {
