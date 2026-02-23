@@ -1,116 +1,74 @@
 import streamlit as st
 import pandas as pd
 
-# 1. Configuración de página - Modo ancho para evitar recortes laterales
-st.set_page_config(page_title="Tracking Qx Medic", page_icon="📦", layout="wide")
+# 1. Configuración de página - LAYOUT WIDE para ocupar todo el ancho
+st.set_page_config(
+    page_title="Tracking Qx Medic", 
+    page_icon="📦", 
+    layout="wide" 
+)
 
-# 2. CSS Maestro de Limpieza Extrema
+# 2. CSS Maestro para eliminar bordes, marcas de agua y ajustar el ancho
 st.markdown("""
     <style>
-    /* ELIMINAR HEADER, PERFIL Y BOTÓN DE DEPLOY SUPERIOR */
-    header[data-testid="stHeader"], 
-    [data-testid="stToolbar"],
-    .stAppDeployButton {
+    /* ELIMINAR ELEMENTOS DE STREAMLIT (Built with Streamlit, Fullscreen, etc) */
+    header, footer, .stAppDeployButton, [data-testid="stToolbar"] {
         display: none !important;
         visibility: hidden !important;
     }
-
-    /* ELIMINAR FOOTER Y "BUILT WITH STREAMLIT" */
-    footer {
-        display: none !important;
-        visibility: hidden !important;
-    }
-
-    /* ELIMINAR BOTÓN DE FULLSCREEN (Pantalla completa) */
+    
+    /* ELIMINAR BOTÓN DE FULLSCREEN EN COMPONENTES */
     button[title="View fullscreen"] {
         display: none !important;
-        visibility: hidden !important;
     }
 
-    /* ELIMINAR WIDGETS DE ESTADO Y BARRA INFERIOR */
-    [data-testid="stStatusWidget"] {
-        display: none !important;
-        visibility: hidden !important;
-    }
-
-    /* FORZAR ANCHO TOTAL DEL CONTENEDOR Y ELIMINAR ESPACIOS */
+    /* FORZAR ANCHO TOTAL EN MÓVILES */
     .block-container {
         max-width: 100% !important;
         padding-top: 1rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
         padding-bottom: 0rem !important;
     }
 
-    /* ESTILOS DE LA INTERFAZ PERSONALIZADA */
-    :root {
-        --bg-card: white;
-        --text-main: #1E293B;
-    }
-    @media (prefers-color-scheme: dark) {
-        :root {
-            --bg-card: #1E293B;
-            --text-main: #F8FAFC;
-        }
+    /* AJUSTE DE LA TARJETA PARA CELULARES */
+    .main-card {
+        background-color: white; 
+        padding: 20px; 
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+        border-top: 8px solid #1E40AF;
+        color: #1E293B;
+        width: 100% !important;
+        margin: auto;
     }
 
+    /* Banner adaptable */
     .header-banner {
         background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
-        padding: 35px 20px; 
-        border-radius: 20px; 
-        color: white; 
-        text-align: center;
-        margin-bottom: 30px;
-        width: 100%;
+        padding: 25px 10px; border-radius: 15px; color: white; text-align: center;
+        margin-bottom: 20px; width: 100%;
     }
     
     .logo-img {
-        max-width: 180px;
-        margin-bottom: 10px;
+        max-width: 150px;
         filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.1));
     }
 
-    .main-card {
-        background-color: var(--bg-card); 
-        padding: 30px; 
-        border-radius: 25px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
-        border-top: 8px solid #1E40AF;
-        color: var(--text-main);
-        max-width: 850px; 
-        margin: auto;
-    }
-
-    .pill {
-        padding: 6px 15px; 
-        border-radius: 50px; 
-        font-weight: bold; 
-        font-size: 0.8rem;
-    }
-
-    .olva-btn {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 12px 24px;
-        background-color: #2563EB;
-        color: white !important;
-        text-decoration: none !important;
-        border-radius: 12px;
-        font-weight: bold;
-    }
-
-    .info-label { color: #64748B; font-size: 0.75rem; margin:0; font-weight:bold; text-transform: uppercase; }
-    .info-value { margin:0; font-size: 0.95rem; margin-bottom: 10px; color: var(--text-main); font-weight: 500; }
+    /* Estilos de texto y etiquetas */
+    .info-label { color: #64748B; font-size: 0.7rem; font-weight:bold; text-transform: uppercase; }
+    .info-value { font-size: 0.9rem; margin-bottom: 8px; color: #1E293B; font-weight: 500; }
+    .pill { padding: 4px 10px; border-radius: 50px; font-weight: bold; font-size: 0.7rem; }
     
-    /* Centrar el buscador de DNI */
-    .stTextInput {
-        max-width: 850px;
-        margin: auto;
+    .olva-btn {
+        display: inline-block; margin-top: 15px; padding: 10px 20px;
+        background-color: #2563EB; color: white !important;
+        text-decoration: none !important; border-radius: 10px; font-weight: bold;
     }
     </style>
     """, unsafe_allow_html=True)
 
-# 3. Carga de datos desde Google Sheets
+# 3. Carga de datos
 @st.cache_data(ttl=300)
 def load_data():
     try:
@@ -123,15 +81,13 @@ def load_data():
     except Exception as e:
         return None
 
-# --- UI (Interfaz de Usuario) ---
+# UI
 logo_url = "https://www.dropbox.com/scl/fi/65bmjdwdeb8ya3gb4wsw5/logo-qx4.png?rlkey=wlp7kp10dhuvltr3yav3vmw6w&raw=1"
 
 st.markdown(f'''
     <div class="header-banner">
         <img src="{logo_url}" class="logo-img">
-        <p style="margin:0; opacity: 0.9; font-size: 1.1rem; font-weight: 300; letter-spacing: 1px;">
-            SISTEMA DE SEGUIMIENTO 2026
-        </p>
+        <p style="margin:0; opacity: 0.9; font-size: 0.9rem; font-weight: 300;">SISTEMA DE SEGUIMIENTO 2026</p>
     </div>
 ''', unsafe_allow_html=True)
 
@@ -142,51 +98,35 @@ if data is not None:
 
     if dni_input:
         resultado = data[data['DNI'].astype(str) == str(dni_input)]
-
         if not resultado.empty:
             res = resultado.iloc[0]
             st.balloons()
-
-            # Extraer campos de la fila
+            
             nombre = res.get('NOMBRES', '-')
-            tracking = res.get('TRACKING', 'PENDIENTE')
+            tracking = res.get('TRACKING', '-')
             estado = str(res.get('ESTADO', 'PROCESANDO')).upper()
             curso = res.get('CURSO', '-')
-            registro = res.get('FECHA DE REGISTRO', '-')
-            entrega = res.get('FECHA DE ENTREGA', '-')
-            obs = res.get('OBSERVACIÓN', 'NINGUNA')
-            ubi = f"{res.get('DISTRITO', '')}, {res.get('PROVINCIA', '')} - {res.get('DEPARTAMENTO', '')}"
+            ubi = f"{res.get('DISTRITO', '')}, {res.get('PROVINCIA', '')}"
 
             bg_p = "#DCFCE7" if "ENTREGADO" in estado else "#FEF9C3"
             tx_p = "#16A34A" if "ENTREGADO" in estado else "#854D0E"
 
-            # Tarjeta de resultados en HTML
             html_card = f"""
             <div class="main-card">
-                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                    <div>
-                        <p class="info-label">ESTUDIANTE</p>
-                        <h2 style="margin:0; font-size: 1.4rem;">{nombre}</h2>
-                    </div>
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                    <h2 style="margin:0; font-size: 1.1rem;">{nombre}</h2>
                     <span class="pill" style="background-color: {bg_p}; color: {tx_p};">{estado}</span>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                    <div><p class="info-label">TRACKING</p><p style="font-weight: 800; color: #3B82F6; margin:0; font-size: 1.2rem;">{tracking}</p></div>
-                    <div><p class="info-label">REGISTRO</p><p class="info-value">{registro}</p></div>
+                <div style="border-top: 1px solid #EEE; padding-top: 10px; margin-top: 10px;">
+                    <p class="info-label">TRACKING</p><p class="info-value" style="color:#2563EB; font-weight:bold;">{tracking}</p>
+                    <p class="info-label">CURSO</p><p class="info-value">{curso}</p>
+                    <p class="info-label">UBICACIÓN</p><p class="info-value">📍 {ubi}</p>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
-                    <div><p class="info-label">CURSO</p><p class="info-value">{curso}</p></div>
-                    <div><p class="info-label">FECHA ENTREGA</p><p class="info-value">{entrega}</p></div>
-                </div>
-                <div style="margin-top: 10px;"><p class="info-label">UBICACIÓN</p><p class="info-value">📍 {ubi}</p></div>
-                <div style="margin-top: 10px; padding: 12px; background: rgba(148, 163, 184, 0.1); border-radius: 12px;">
-                    <p class="info-label">OBSERVACIÓN</p><p style="margin:0; font-size: 0.85rem; font-style: italic;">{obs}</p>
-                </div>
-                <a href="https://tracking.olvaexpress.pe" target="_blank" class="olva-btn">🚚 Ver en Olva Courier</a>
+                <a href="https://tracking.olvaexpress.pe" target="_blank" class="olva-btn">🚚 Olva Courier</a>
             </div>
             """
             st.markdown(html_card, unsafe_allow_html=True)
         else:
-            st.error("❌ No se encontró el DNI.")
+            st.error("DNI no encontrado.")
 
-st.markdown("<br><p style='text-align: center; color: #94A3B8; font-size: 0.75rem;'>© 2026 Qx Medic | Logística</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #94A3B8; font-size: 0.7rem; margin-top:20px;'>© 2026 Qx Medic | Logística</p>", unsafe_allow_html=True)
