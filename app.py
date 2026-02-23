@@ -27,15 +27,15 @@ st.markdown("""
     }
     .header-banner {
         background: linear-gradient(135deg, #1E40AF 0%, #1D4ED8 100%);
-        padding: 15px; border-radius: 20px; color: white; text-align: center;
-        margin-bottom: 25px;
+        padding: 10px; border-radius: 15px; color: white; text-align: center;
+        margin-bottom: 20px;
     }
     
-    /* --- LOGO MINIATURA --- */
+    /* --- LOGO ULTRA PEQUEÑO (10PX) --- */
     .logo-img {
         max-width: 10px; 
         margin-bottom: 2px;
-        filter: drop-shadow(0px 2px 4px rgba(0,0,0,0.1));
+        opacity: 0.9;
     }
     
     .main-card {
@@ -78,14 +78,13 @@ def load_data():
         return None
 
 # --- UI ---
-# URL de Dropbox corregida para renderizado directo
 logo_url = "https://www.dropbox.com/scl/fi/1tbfn3ge2b33nqnjgagft/LOGO-QX-MEDIC-600x315.png?rlkey=4qwxkmhs736fovnz2l3oxzier&raw=1" 
 
 st.markdown(f'''
     <div class="header-banner">
         <img src="{logo_url}" class="logo-img">
-        <h1 style="font-size: 1.0rem; margin: 0;">SISTEMA DE TRACKING</h1>
-        <p style="margin: 0; opacity: 0.8; font-size: 0.85rem;">Logística y Envíos 2026</p>
+        <h1 style="font-size: 1.1rem; margin: 0; line-height: 1.2;">SISTEMA DE TRACKING</h1>
+        <p style="margin: 0; opacity: 0.8; font-size: 0.75rem;">Logística y Envíos 2026</p>
     </div>
 ''', unsafe_allow_html=True)
 
